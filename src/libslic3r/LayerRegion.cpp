@@ -81,7 +81,7 @@ void LayerRegion::make_perimeters(const SurfaceCollection &slices, SurfaceCollec
     
     g.layer                 = this->layer();
     g.ext_perimeter_flow    = this->flow(frExternalPerimeter);
-    g.overhang_flow         = this->region()->flow(frPerimeter, -1, true, false, -1, *this->layer()->object());
+    g.overhang_flow         = g.ext_perimeter_flow;
     g.solid_infill_flow     = this->flow(frSolidInfill);
     
     g.process();

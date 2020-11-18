@@ -1106,8 +1106,7 @@ ExtrusionEntityCollection PerimeterGenerator::_traverse_loops(
         
         // detect overhanging/bridging perimeters
         ExtrusionPaths paths;
-        if ( this->config->overhangs_width_speed.value > 0 && this->layer->id() > 0
-            && !(this->object_config->support_material && this->object_config->support_material_contact_distance_type.value == zdNone)) {
+        if ( this->config->overhangs_width_speed.value > 0 && this->layer->id() > 0) {
             paths = this->create_overhangs(loop.polygon, role, is_external);
         } else {
             ExtrusionPath path(role);

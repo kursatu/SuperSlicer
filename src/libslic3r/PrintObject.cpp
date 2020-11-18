@@ -1879,16 +1879,7 @@ void PrintObject::bridge_over_infill()
         
         // skip bridging in case there are no voids
         if (region.config().fill_density.value == 100) continue;
-        
-        // get bridge flow
-        Flow bridge_flow = region.flow(
-            frSolidInfill,
-            -1,     // layer height, not relevant for bridge flow
-            true,   // bridge
-            false,  // first layer
-            -1,     // custom width, not relevant for bridge flow
-            *this
-        );
+
         
         for (LayerPtrs::iterator layer_it = m_layers.begin(); layer_it != m_layers.end(); ++ layer_it) {
             // skip first layer
@@ -1908,7 +1899,17 @@ void PrintObject::bridge_over_infill()
             ExPolygons to_bridge;
             {
                 Polygons to_bridge_pp = internal_solid;
-                
+
+                // Use proper width and layer height for bridge
+                Flow bridge_flow = region.flow(
+                    frSolidInfill,
+                    layer->height,     // layer height, not relevant for bridge flow
+                    false,   // bridge
+                    false,  // first layer
+                    -1,     // custom width, not relevant for bridge flow
+                    *this
+                );
+
                 // iterate through lower layers spanned by bridge_flow
                 double bottom_z = layer->print_z - bridge_flow.height;
                 for (int i = int(layer_it - m_layers.begin()) - 1; i >= 0; --i) {
